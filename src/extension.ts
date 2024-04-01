@@ -98,9 +98,12 @@ class SymbolInfo {
 		while (true) {
 			if (index >= text.length) return [];
 
-			if (text[index] === "<") depth++;
-			else if (text[index] === ">") depth--;
-			else if (depth === 0 && text[index] === "{") return [];
+			let indexOfClass = text.indexOf('class');
+
+			if (text[index] === '<') depth++;
+      else if (text[index] === '>') depth--;
+      else if (depth === 0 && text[index] === '{' && index > indexOfClass)
+        return [];
 
 			if (depth === 0 && text.substr(index).startsWith("extends ")) {
 				index += "extends ".length;
@@ -126,10 +129,11 @@ class SymbolInfo {
 		while (true) {
 			if (index >= text.length) break;
 
+			let indexOfClass = text.indexOf('class');
 			if (text[index] === "<") depth++;
 			else if (text[index] === ">") depth--;
 			else if (depth === 0) {
-				if (text[index] === "{") break;
+				if (text[index] === '{' && index > indexOfClass) break;
 
 				if (text.substr(index).startsWith("implements ")) {
 					inImplementList = true;
